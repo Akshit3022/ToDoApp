@@ -29,56 +29,14 @@ def login(request):
         if CustomUser.objects.filter(email=email, password=password).exists():  
             request.session['email'] = email
             return redirect('home')
-        elif User.objects.filter(email=user.email, password=user.password).exists():
+        elif User.objects.filter(email=user.email).exists() and check_password(password, request.user.password):
             request.session['email'] = email
             return redirect('adminDash')
         else:
             return HttpResponse("Either email or password is incorrect.")
-    
+              
     return render(request, 'login.html')
     
-# def login(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-
-#         user = request.user
-
-#         if CustomUser.objects.filter(email=email, password=password).exists():
-#                 request.session['email'] = email
-#                 return redirect('home')
-#         elif user.email == email:
-#             print(email)
-#             if check_password(password, user.password):
-#                 request.session['email'] = email
-#                 return redirect('adminDash')    
-
-#         return HttpResponse("Either email or password is incorrect.")
-    
-#     return render(request, 'login.html')
-
-
-# def login(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-
-#         # Check if a user with the provided email exists
-#         if CustomUser.objects.filter(email=email).exists():
-#             user = CustomUser.objects.get(email=email)
-#             # Check if the provided password matches the hashed password in the database
-#             if check_password(password, user.password):
-#                 if user.is_superuser:  # Check if the user is an admin
-#                     request.session['email'] = email
-#                     return redirect('adminDash')
-#                 else:
-#                     request.session['email'] = email
-#                     return redirect('home')
-#         return HttpResponse("Either email or password is incorrect.")
-    
-#     return render(request, 'login.html')
-
-
 
 def register(request):
     if request.method == 'POST':
